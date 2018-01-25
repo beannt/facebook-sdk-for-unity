@@ -24,7 +24,16 @@ namespace Facebook.Unity.Canvas
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
+
+
+    public static class CanvasScript
+    {
+        [DllImport("__Internal")]
+        public static extern void FacebookLogInCaptureClick(string permissions, string callbackId);
+    }
 
     internal sealed class CanvasFacebook : FacebookBase, ICanvasFacebookImplementation
     {
@@ -147,7 +156,8 @@ namespace Facebook.Unity.Canvas
             FacebookDelegate<ILoginResult> callback)
         {
             this.canvasJSWrapper.DisableFullScreen();
-            this.canvasJSWrapper.ExternalCall("FBUnity.login", permissions, CallbackManager.AddFacebookDelegate(callback));
+            //this.canvasJSWrapper.ExternalCall("FBUnity.login", permissions, CallbackManager.AddFacebookDelegate(callback));
+            CanvasScript.FacebookLogInCaptureClick(string.Join(",", permissions.ToArray()), CallbackManager.AddFacebookDelegate(callback));
         }
 
         public override void LogInWithReadPermissions(
@@ -155,7 +165,8 @@ namespace Facebook.Unity.Canvas
             FacebookDelegate<ILoginResult> callback)
         {
             this.canvasJSWrapper.DisableFullScreen();
-            this.canvasJSWrapper.ExternalCall("FBUnity.login", permissions, CallbackManager.AddFacebookDelegate(callback));
+            //this.canvasJSWrapper.ExternalCall("FBUnity.login", permissions, CallbackManager.AddFacebookDelegate(callback));
+            CanvasScript.FacebookLogInCaptureClick(string.Join(",", permissions.ToArray()), CallbackManager.AddFacebookDelegate(callback));
         }
 
         public override void LogOut()
